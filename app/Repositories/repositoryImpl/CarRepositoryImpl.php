@@ -5,6 +5,7 @@ namespace App\Repositories\repositoryImpl;
 use App\Models\Car;
 use App\Models\Image;
 use App\Repositories\IRepository;
+use PhpParser\Node\Stmt\ElseIf_;
 
 class CarRepositoryImpl implements IRepository
 {
@@ -19,36 +20,54 @@ class CarRepositoryImpl implements IRepository
   public function getAll($request)
   {
     $sortBy = 'id';
-    $typeOfSort = 'DESC';
-    // dd($request);
+    $typeOfSort = 'ASC';
+    $search = '';
     if ($request->has('sortBy')) {
-      if (!in_array($request->sortBy, ['type', 'price_per_day', 'availability_status'])) {
-        $sortBy = 'id';
-        return $this->car->with(['image' => function ($query) {
-          $query->select('imageable_id', 'path');
-        }])->get();
-      } else {
+      if (in_array($request->sortBy, ['type', 'price_per_day', 'availability_status'])) {
         $sortBy = $request->sortBy;
         $typeOfSort = $request->typeOfSort ? $request->typeOfSort : $typeOfSort;
-        return $this->car->with(['image' => function ($query) {
-          $query->select('imageable_id', 'path');
-        }])->orderBy($sortBy, $typeOfSort)->get();
       }
-    } else {
-      return $this->car->with(['image' => function ($query) {
-        $query->select('imageable_id', 'path');
-      }])->get();
     }
-  }
+    if ($request->has('search') && !empty($request->search)) {
+      $search = $request->search;
+      $carReturned = $this->car->with(['image' => function ($query) {
+        $query->select('imageable_id', 'path');
+      }])
+        ->where('name', 'LIKE', "%{$search}%")
+        ->orderBy($sortBy, $typeOfSort)
+        ->get();
 
-  // Get car by Name
-  public function findBySearch($search)
-  {
+      if ($carReturned->isEmpty()) {
+        return response()->json(['error' => 'Car Not Found'], 401);
+      } else {
+        return response()->json($carReturned);
+      }
+    }
     return $this->car->with(['image' => function ($query) {
       $query->select('imageable_id', 'path');
-    }])->where('name', 'LIKE', "%{$search}%")->get();
+    }])->orderby($sortBy, $typeOfSort)->get();
   }
 
+  public function findById($id)
+  {
+    try {
+      $car = $this->car->with(['image' => function ($query) {
+        $query->select('imageable_id', 'path');
+      }])->find($id);
+
+      if ($car) {
+        return response()->json($car, 200);
+      } else {
+        return response()->json(['error' => 'Car Not Found'], 404);
+      }
+    } catch (\Exception $e) {
+      return response()->json(['error' => 'An error occurred while fetching the car details'], 500);
+    }
+  }
+  public function getAvailableCars()
+  {
+    return $this->car->where('availability_status', 1)->get();
+  }
 
   public function createCarImage($img_name, $car)
   {

@@ -54,8 +54,6 @@ class OrderController extends Controller
             $days = $start_date->diffInDays($end_date);
 
 
-
-
             $car = Car::findOrFail($request->car_id);
             if (!$car->availability_status) {
                 return response()->json(['error' => 'Car not Available'], 400);
@@ -111,7 +109,6 @@ class OrderController extends Controller
     {
 
         try {
-
             if (!$id) {
                 return response()->json(['error' => 'No Orders For This User']);
             }

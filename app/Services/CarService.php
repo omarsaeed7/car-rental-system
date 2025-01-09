@@ -18,10 +18,13 @@ class CarService
  {
   return $this->carRepoImpl->getAll($request);
  }
+ public function getAvailableCars(){
+  return $this->carRepoImpl->getAvailableCars();
+ }
 
- public function getCarBySearch($search)
+ public function getCarById($id)
  {
-  return $this->carRepoImpl->findBySearch($search);
+  return $this->carRepoImpl->findById($id);
  }
 
  public function createCarWithImage($imageName, $car)

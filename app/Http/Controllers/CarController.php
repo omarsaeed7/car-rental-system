@@ -59,19 +59,11 @@ class CarController extends Controller
         }
     }
 
-    // public function filterCars(){
-    //     return 0;
-    // }
-    // Show Car By Search
-    public function viewSingleCar($search)
-    {
-        if ($search && !empty($search)) {
-            // $cars = Car::with('image')->where('name', 'LIKE', "%{$search}%")->get();
-            $cars = $this->carService->getCarBySearch($search);
-            return response()->json($cars);
-        } else {
-            return response()->json(['error' => 'Car Not Found'], 400);
-        }
+    public function getCarById($id){
+        return response()->json($this->carService->getCarById($id));
+    }
+    public function getAvailableCars(){
+        return response()->json($this->carService->getAvailableCars());
     }
 
     public function edit(string $id) {}

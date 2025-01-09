@@ -10,24 +10,29 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::get('/users', [UserController::class, 'index']);
-Route::post('/users', [UserController::class, 'store']);
-Route::get('/users/{id}', [UserController::class, 'show']);
-Route::put('/users/{id}', [UserController::class, 'update']);
-Route::delete('/users/{id}', [UserController::class, 'destroy']);
+Route::prefix('/users')->group(function () {
+    Route::get('/', [UserController::class, 'index']);
+    Route::post('/', [UserController::class, 'store']);
+    Route::get('/{id}', [UserController::class, 'show']);
+    Route::put('/{id}', [UserController::class, 'update']);
+    Route::delete('/{id}', [UserController::class, 'destroy']);
+});
 
-Route::get('/cars', [CarController::class, 'getCars']);
-// Route::get('/cars-with-image', [CarController::class, 'showWithImage']);
-Route::get('/cars/filter/{filters}', [CarController::class , 'filterCars']);
-Route::post('/cars', [CarController::class, 'storeCar']);
-Route::get('/cars/{search}', [CarController::class, 'viewSingleCar']);
-Route::put('/cars/{id}', [CarController::class, 'updateCar']);
-Route::delete('/cars/{id}', [CarController::class, 'destroyCar']);
+Route::prefix('/cars')->group(function () {
+    Route::get('/', [CarController::class, 'getCars']);
+    Route::get('/available', [CarController::class, 'getAvailableCars']);
+    Route::post('/', [CarController::class, 'storeCar']);
+    Route::get('/{id}', [CarController::class, 'getCarById']);
+    Route::put('/{id}', [CarController::class, 'updateCar']);
+    Route::delete('/{id}', [CarController::class, 'destroyCar']);
+});
 
-Route::get('/orders', [OrderController::class, 'index']);
-Route::post('/orders', [OrderController::class, 'store']);
-Route::get('/orders/user/{id}',[OrderController::class,'getUserOrders']);
-Route::get('/orders/{id}', [OrderController::class, 'show']);
-Route::put('/orders/{id}', [OrderController::class, 'update']);
-Route::delete('/orders/{id}', [OrderController::class, 'destroy']);
-Route::put('/orders/{orderId}/pay',[OrderController::class, 'updatePayment']);
+Route::prefix('/orders')->group(function () {
+    Route::get('/', [OrderController::class, 'index']);
+    Route::post('/', [OrderController::class, 'store']);
+    Route::get('/user/{id}', [OrderController::class, 'getUserOrders']);
+    Route::get('/{id}', [OrderController::class, 'show']);
+    Route::put('/{id}', [OrderController::class, 'update']);
+    Route::delete('/{id}', [OrderController::class, 'destroy']);
+    Route::put('/{orderId}/pay', [OrderController::class, 'updatePayment']);
+});
