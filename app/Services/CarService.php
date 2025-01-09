@@ -18,13 +18,14 @@ class CarService
  {
   return $this->carRepoImpl->getAll($request);
  }
- public function getAvailableCars(){
-  return $this->carRepoImpl->getAvailableCars();
- }
 
  public function getCarById($id)
  {
   return $this->carRepoImpl->findById($id);
+ }
+
+ public function updateMaintainance($id,$request){
+  return $this->carRepoImpl->updateMaintainance($id,$request);
  }
 
  public function createCarWithImage($imageName, $car)

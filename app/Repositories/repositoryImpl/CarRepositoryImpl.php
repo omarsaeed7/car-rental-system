@@ -22,32 +22,32 @@ class CarRepositoryImpl implements IRepository
     $sortBy = 'id';
     $typeOfSort = 'ASC';
     $search = '';
-    if ($request->has('sortBy')) {
-      if (in_array($request->sortBy, ['type', 'price_per_day', 'availability_status'])) {
-        $sortBy = $request->sortBy;
-        $typeOfSort = $request->typeOfSort ? $request->typeOfSort : $typeOfSort;
-      }
-    }
-    if ($request->has('search') && !empty($request->search)) {
-      $search = $request->search;
-      $carReturned = $this->car->with(['image' => function ($query) {
-        $query->select('imageable_id', 'path');
-      }])
-        ->where('name', 'LIKE', "%{$search}%")
-        ->orderBy($sortBy, $typeOfSort)
-        ->get();
 
-      if ($carReturned->isEmpty()) {
-        return response()->json(['error' => 'Car Not Found'], 401);
-      } else {
-        return response()->json($carReturned);
-      }
+    $query = $this->car::query();
+
+    // dd(empty($request->type));
+    // dd(isset($request->type));
+    if (isset($request->search) && !empty($request->search)) {
+      $query->where('name', 'LIKE', "%{$request->search}%");
     }
-    return $this->car->with(['image' => function ($query) {
+    if (isset($request->type) && !empty($request->type)) {
+      $query->where('type', 'LIKE', "%{$request->type}%");
+    }
+    if (isset($request->availability_status) && !empty($request->availability_status)) {
+      $query->where('availability_status', $request->availability_status);
+    }
+    if (isset($request->price_per_day_from) && trim($request->price_per_day_from) != "") {
+      $query->where('price_per_day', ">=", $request->price_per_day_from);
+    }
+    if (isset($request->price_per_day_to) && trim($request->price_per_day_to) != "") {
+      $query->where('price_per_day', "<=", $request->price_per_day_to);
+    }
+
+    return $query->with(['image' => function ($query) {
       $query->select('imageable_id', 'path');
     }])->orderby($sortBy, $typeOfSort)->get();
   }
-
+  //============================
   public function findById($id)
   {
     try {
@@ -64,16 +64,25 @@ class CarRepositoryImpl implements IRepository
       return response()->json(['error' => 'An error occurred while fetching the car details'], 500);
     }
   }
-  public function getAvailableCars()
-  {
-    return $this->car->where('availability_status', 1)->get();
-  }
+
 
   public function createCarImage($img_name, $car)
   {
     $car->image()->create([
       'path' => 'images/' . $img_name
     ]);
+  }
+
+
+  public function updateMaintainance($id, $request)
+  {
+    if (isset($request->maintainance)) {
+      $this->car::where('id', $id)->update([
+        'maintainance' => $request->maintainance
+      ]);
+    } else {
+      return response()->json(['error' => 'Maintainance is required'], 422);
+    }
   }
   public function create(array $data)
   {

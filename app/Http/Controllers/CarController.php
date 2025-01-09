@@ -62,19 +62,11 @@ class CarController extends Controller
     public function getCarById($id){
         return response()->json($this->carService->getCarById($id));
     }
-    public function getAvailableCars(){
-        return response()->json($this->carService->getAvailableCars());
-    }
 
-    public function edit(string $id) {}
-
-    public function updateCar(Request $request, string $id)
+    public function updateMaintainance(Request $request,$id)
     {
-        //
+        return response()->json($this->carService->updateMaintainance($id,$request));
     }
+    
 
-    public function destroyCar(string $id)
-    {
-        //
-    }
 }

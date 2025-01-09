@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('type');
             $table->decimal('price_per_day',8,2);
+            $table->boolean('maintainance')->default(false);
             $table->boolean('availability_status')->default(false);
             // $table->timestamps();
         });

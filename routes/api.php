@@ -20,11 +20,11 @@ Route::prefix('/users')->group(function () {
 
 Route::prefix('/cars')->group(function () {
     Route::get('/', [CarController::class, 'getCars']);
-    Route::get('/available', [CarController::class, 'getAvailableCars']);
     Route::post('/', [CarController::class, 'storeCar']);
     Route::get('/{id}', [CarController::class, 'getCarById']);
     Route::put('/{id}', [CarController::class, 'updateCar']);
     Route::delete('/{id}', [CarController::class, 'destroyCar']);
+    Route::put('/maintainance/{id}' , [CarController::class , 'updateMaintainance']);
 });
 
 Route::prefix('/orders')->group(function () {
