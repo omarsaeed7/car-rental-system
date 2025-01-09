@@ -53,13 +53,23 @@ class OrderController extends Controller
             }
             $days = $start_date->diffInDays($end_date);
 
+
+
+
             $car = Car::findOrFail($request->car_id);
-            if(!$car->availability_status){
-                return response()->json(['error' => 'Car not Available'],400);
+            if (!$car->availability_status) {
+                return response()->json(['error' => 'Car not Available'], 400);
             }
             $price = $car->price_per_day;
+            // ==============
+            if ($days > 7) {
+                $total_price = $price * ($days + 1) * (10/100);
+            }else{
+                $total_price = $price * ($days + 1); // Add 1 to include both start and end day
+            }
 
-            $total_price = $price * ($days + 1); // Add 1 to include both start and end day
+            //===========
+            
 
             // Format the dates to store in the database (Y-m-d format)
             $start_date = $start_date->format('Y-m-d');
@@ -73,7 +83,7 @@ class OrderController extends Controller
                 'end_date' => $end_date,
                 'total_price' => $total_price,
             ]);
-            Car::where('id',$request->car_id)->update([
+            Car::where('id', $request->car_id)->update([
                 'availability_status' => 0,
             ]);
 
@@ -101,7 +111,7 @@ class OrderController extends Controller
     {
 
         try {
-            
+
             if (!$id) {
                 return response()->json(['error' => 'No Orders For This User']);
             }

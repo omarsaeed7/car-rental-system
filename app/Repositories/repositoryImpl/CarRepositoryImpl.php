@@ -19,16 +19,20 @@ class CarRepositoryImpl implements IRepository
   public function getAll($request)
   {
     $sortBy = 'id';
-    $typeOfSort = 'ASC';
+    $typeOfSort = 'DESC';
     // dd($request);
     if ($request->has('sortBy')) {
       if (!in_array($request->sortBy, ['type', 'price_per_day', 'availability_status'])) {
         $sortBy = 'id';
-        dd($request);
+        return $this->car->with(['image' => function ($query) {
+          $query->select('imageable_id', 'path');
+        }])->get();
       } else {
         $sortBy = $request->sortBy;
         $typeOfSort = $request->typeOfSort ? $request->typeOfSort : $typeOfSort;
-        return $this->car->orderBy($sortBy, $typeOfSort)->get();
+        return $this->car->with(['image' => function ($query) {
+          $query->select('imageable_id', 'path');
+        }])->orderBy($sortBy, $typeOfSort)->get();
       }
     } else {
       return $this->car->with(['image' => function ($query) {
@@ -37,12 +41,12 @@ class CarRepositoryImpl implements IRepository
     }
   }
 
-  // Get car by id
+  // Get car by Name
   public function findBySearch($search)
   {
-    // Filter for car type , price range , availability status
-
-    return $this->car->with('image')->where('name', 'LIKE', "%{$search}%")->get();
+    return $this->car->with(['image' => function ($query) {
+      $query->select('imageable_id', 'path');
+    }])->where('name', 'LIKE', "%{$search}%")->get();
   }
 
 
