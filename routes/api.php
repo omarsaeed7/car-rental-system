@@ -31,8 +31,8 @@ Route::prefix('/orders')->group(function () {
     Route::get('/', [OrderController::class, 'index']);
     Route::post('/', [OrderController::class, 'store']);
     Route::get('/user/{id}', [OrderController::class, 'getUserOrders']);
+    Route::put('/{orderId}/pay', [OrderController::class, 'updatePayment']);
     Route::get('/{id}', [OrderController::class, 'show']);
     Route::put('/{id}', [OrderController::class, 'update']);
     Route::delete('/{id}', [OrderController::class, 'destroy']);
-    Route::put('/{orderId}/pay', [OrderController::class, 'updatePayment']);
 });

@@ -25,15 +25,13 @@ class CarRepositoryImpl implements IRepository
 
     $query = $this->car::query();
 
-    // dd(empty($request->type));
-    // dd(isset($request->type));
     if (isset($request->search) && !empty($request->search)) {
       $query->where('name', 'LIKE', "%{$request->search}%");
     }
     if (isset($request->type) && !empty($request->type)) {
       $query->where('type', 'LIKE', "%{$request->type}%");
     }
-    if (isset($request->availability_status) && !empty($request->availability_status)) {
+    if (isset($request->availability_status) && trim($request->availability_status) != '') {
       $query->where('availability_status', $request->availability_status);
     }
     if (isset($request->price_per_day_from) && trim($request->price_per_day_from) != "") {
@@ -42,10 +40,11 @@ class CarRepositoryImpl implements IRepository
     if (isset($request->price_per_day_to) && trim($request->price_per_day_to) != "") {
       $query->where('price_per_day', "<=", $request->price_per_day_to);
     }
+    
 
     return $query->with(['image' => function ($query) {
       $query->select('imageable_id', 'path');
-    }])->orderby($sortBy, $typeOfSort)->get();
+    }])->get();
   }
   //============================
   public function findById($id)
