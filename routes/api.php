@@ -19,7 +19,7 @@ Route::prefix('/users')->group(function () {
 });
 
 Route::prefix('/cars')->group(function () {
-    Route::get('/', [CarController::class, 'getCars']);
+    Route::get('/', [CarController::class, 'getCars'])->name('cars.index');
     Route::post('/', [CarController::class, 'storeCar']);
     Route::get('/{id}', [CarController::class, 'getCarById']);
     Route::put('/{id}', [CarController::class, 'updateCar']);

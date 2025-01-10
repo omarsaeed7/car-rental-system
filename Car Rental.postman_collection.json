@@ -1,0 +1,261 @@
+{
+	"info": {
+		"_postman_id": "accfde63-5cab-4ac3-abe6-4a0ecf4dd02b",
+		"name": "Car Rental",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "40459901"
+	},
+	"item": [
+		{
+			"name": "Cars",
+			"item": [
+				{
+					"name": "AddNewCar",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "MG",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "Hatch",
+									"type": "text"
+								},
+								{
+									"key": "price_per_day",
+									"value": "888",
+									"type": "text"
+								},
+								{
+									"key": "availability_status",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/home/kf/Pictures/meme/يكش تولع.jpeg"
+								}
+							]
+						},
+						"url": "http://127.0.0.1:8000/api/cars"
+					},
+					"response": []
+				},
+				{
+					"name": "ListAllCars",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://127.0.0.1:8000/api/cars"
+					},
+					"response": []
+				},
+				{
+					"name": "ListCarByFilter",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/cars/?availability_status=0",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"cars",
+								""
+							],
+							"query": [
+								{
+									"key": "price_per_day_from",
+									"value": "-300",
+									"disabled": true
+								},
+								{
+									"key": "price_per_day_to",
+									"value": "600",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "merc",
+									"disabled": true
+								},
+								{
+									"key": "availability_status",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateCarMaintainance",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/cars/maintainance/2?maintainance=1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"cars",
+								"maintainance",
+								"2"
+							],
+							"query": [
+								{
+									"key": "maintainance",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Orders",
+			"item": [
+				{
+					"name": "CreateNewOrder",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "user_id",
+									"value": "3",
+									"type": "text"
+								},
+								{
+									"key": "car_id",
+									"value": "6",
+									"type": "text"
+								},
+								{
+									"key": "start_date",
+									"value": "10-1-2025",
+									"type": "text"
+								},
+								{
+									"key": "end_date",
+									"value": "17-1-2025",
+									"type": "text"
+								}
+							]
+						},
+						"url": "http://127.0.0.1:8000/api/orders"
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllOrders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://127.0.0.1:8000/api/orders"
+					},
+					"response": []
+				},
+				{
+					"name": "updatePayment",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": "http://127.0.0.1:8000/api/orders/2/pay"
+					},
+					"response": []
+				},
+				{
+					"name": "getUserOrders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://127.0.0.1:8000/api/orders/user/3"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Order",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://127.0.0.1:8000/api/orders/5"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Order",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/orders/6?end_date=13-1-2025",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"orders",
+								"6"
+							],
+							"query": [
+								{
+									"key": "end_date",
+									"value": "13-1-2025"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "GetAllUsers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://127.0.0.1:8000/api/users"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -20,11 +20,11 @@ class CarController extends Controller
     // Get All Cars
     public function getCars(Request $request)
     {
-        return response()->json($this->carService->getAllCars($request));
+        // return response()->json($this->carService->getAllCars($request));
         
         // retrive the image only 
-        // $cars = $this->carService->getAllCars();
-        // return view('welcome', compact('cars'));
+        $cars = $this->carService->getAllCars($request);
+        return view('cars.index', compact('cars'));
     }
 
     // Store New Car
